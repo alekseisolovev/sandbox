@@ -1,0 +1,13 @@
+services:
+  sandbox:
+    build: .
+    ports:
+      - "8888:8888" 
+    volumes:
+      - .:/app 
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - TAVILY_API_KEY=${TAVILY_API_KEY}
+    env_file:
+      - .env
+
