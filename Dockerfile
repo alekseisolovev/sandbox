@@ -3,6 +3,16 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+ENV APP_USER=appuser
+ENV APP_GROUP=appgroup
+ENV HOME=/home/appuser
+
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN groupadd --system --gid ${GROUP_ID} ${APP_GROUP} \
+    && useradd --system --uid ${USER_ID} --gid ${APP_GROUP} --no-log-init --home ${HOME} --create-home --shell /sbin/nologin ${APP_USER}
+
 WORKDIR /app
 
 # RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,5 +25,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY . .
 
+RUN chown -R ${APP_USER}:${APP_GROUP} /app
+USER ${APP_USER}
+
 EXPOSE 8888
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root"]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888"]
