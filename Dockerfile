@@ -3,17 +3,17 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-ENV APP_USER=appuser
-ENV APP_GROUP=appgroup
-ENV HOME=/home/appuser
+ENV USER_NAME=user      
+ENV GROUP_NAME=group    
+ENV HOME=/home/user 
 
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 
-RUN groupadd --system --gid ${GROUP_ID} ${APP_GROUP} \
-    && useradd --system --uid ${USER_ID} --gid ${APP_GROUP} --no-log-init --home ${HOME} --create-home --shell /sbin/nologin ${APP_USER}
+RUN groupadd --system --gid ${GROUP_ID} ${GROUP_NAME} \
+    && useradd --system --uid ${USER_ID} --gid ${GROUP_NAME} --no-log-init --home ${HOME} --create-home --shell /sbin/nologin ${USER_NAME}
 
-WORKDIR /app
+WORKDIR /sandbox
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     graphviz \
@@ -26,6 +26,5 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-RUN chown -R ${APP_USER}:${APP_GROUP} /app
-USER ${APP_USER}
-
+RUN chown -R ${USER_NAME}:${GROUP_NAME} /sandbox
+USER ${USER_NAME}
