@@ -29,5 +29,3 @@ RUN pip install --no-cache-dir --upgrade pip && \
 RUN chown -R ${APP_USER}:${APP_GROUP} /app
 USER ${APP_USER}
 
-EXPOSE 8888
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888"]
