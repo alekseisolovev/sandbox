@@ -9,9 +9,6 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
-# Poetry
-poetry.lock
-
 # Docker
 .dockerignore
 
